@@ -1,0 +1,25 @@
+{
+  "name": "belllapadulainterfacebackend",
+  "version": "1.0.0",
+  "description": "Backend implementation of the \"Bell La-Padula\" model for Mandatory Access Control Policy enforcement.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/any-ket/BellLaPadulaInterfaceBackend.git"
+  },
+  "author": "Aniket Singh",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/any-ket/BellLaPadulaInterfaceBackend/issues"
+  },
+  "homepage": "https://github.com/any-ket/BellLaPadulaInterfaceBackend#readme",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "express": "^4.18.2",
+    "logger": "github:any-ket/logger",
+    "mysql": "^2.18.1"
+  }
+}
