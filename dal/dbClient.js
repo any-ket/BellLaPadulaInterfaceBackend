@@ -1,17 +1,15 @@
 const mysql = require("mysql");
 const logger = require("logger");
-var authDbCli;
+const authDbCli = mysql.createConnection({
+  host: '127.0.0.1',
+  user: 'root',
+  password: 'current password',
+  database: 'auth',
+  multipleStatements: true
+});
 
 function InitialiseSqlClients(){
   return new Promise((resolve, reject) => {
-    authDbCli = mysql.createConnection({
-      host: '127.0.0.1',
-      user: 'root',
-      password: 'password',
-      database: 'auth',
-      multipleStatements: true
-    });
-
     authDbCli.connect((err) => {
       if(err){
         logger.error("Failed Initialising Sql Client!!", err);

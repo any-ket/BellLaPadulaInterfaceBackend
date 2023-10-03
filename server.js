@@ -4,16 +4,15 @@ const logger = require("logger");
 const app = express();
 const PORT = 9099;
 
-const IndexRouter = require("./httpl");
 const { InitialiseSqlClients } = require("./dal/dbClient");
 
 app.use(session({
-  secret: config.SECRET,
+  secret: "SECRET",
   resave: false,
   saveUninitialized: true,
 }));
 
-app.use(IndexRouter);
+app.use(require("./httpl"));
 
 InitialiseSqlClients().then(() => {
   app.listen(PORT, () => {
