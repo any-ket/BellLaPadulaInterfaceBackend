@@ -1,11 +1,12 @@
 const express = require("express");
 const session = require("express-session");
 const logger = require("logger");
+const bodyParser = require('body-parser');
 const app = express();
 const PORT = 9099;
 
 const { InitialiseSqlClients } = require("./dal/dbClient");
-
+app.use(bodyParser.json());
 app.use(session({
   secret: "SECRET",
   resave: false,

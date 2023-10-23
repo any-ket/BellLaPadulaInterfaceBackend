@@ -1,5 +1,4 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 const { StatusCodes } = require('http-status-codes');
 const logger = require('logger');
 
@@ -14,7 +13,7 @@ const apiRequestHandler = async (
     requestData.user = requestData?.session;
 
     // Perform any session authorization logic here
-    if (shouldItBeAuthorized && (!reqData.user || !reqData.user.idx))
+    if (shouldItBeAuthorized && (!requestData.user || !requestData.user.idx))
       return responseHandler(StatusCodes.UNAUTHORIZED);
 
     // logger.debug(blFunction.name);
@@ -31,7 +30,6 @@ const apiRequestHandler = async (
 // Function to create API methods dynamically
 const CreateAPI = (router, apiEndpoints) => {
   apiEndpoints.forEach((apiEndpoint) => {
-    router.use(bodyParser.json());
     router[apiEndpoint.method](apiEndpoint.endpoint, async (req, res) => {
       apiRequestHandler(
         apiEndpoint.shouldItBeAuthorized,

@@ -5,6 +5,7 @@ schemas = {
 		'idx int NOT NULL AUTO_INCREMENT',
 	    "name varchar(255) NOT NULL",
 	    "email varchar(255) NOT NULL",
+	    "pwd varchar(255) NOT NULL",
 	    "PRIMARY KEY (idx)"
 	    ],
 	Objects: [

@@ -11,6 +11,8 @@ function Signup(reqData){
       return reject({statusCode: StatusCodes.BAD_REQUEST, responseData: "Invalid Request"});
     }
 
+    if(!password || !password.length)
+      return resolve({statusCode: StatusCodes.BAD_REQUEST, responseData: "Invalid password"});
 
     const hash = await bcrypt.hash(password, 10);
     const values = [[name, email, hash]];
