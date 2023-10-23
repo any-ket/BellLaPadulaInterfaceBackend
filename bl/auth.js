@@ -5,7 +5,7 @@ const { StatusCodes } = require('http-status-codes');
 function Signup(reqData){
   return new Promise(async (resolve, reject) => {
     try{
-      var { name, email, mob, password } = reqData.body;
+      var { name, email, password } = reqData.body;
     }catch(e){
       logger.error("Invalid ReqBody", e);
       return reject({statusCode: StatusCodes.BAD_REQUEST, responseData: "Invalid Request"});
@@ -13,8 +13,8 @@ function Signup(reqData){
 
 
     const hash = await bcrypt.hash(password, 10);
-    const values = [[name, email, mob, hash]];
-    authDbCli.query(`INSERT INTO Users(name, email, mobile, pwd) VALUES ?`, [values], (err, result) => {
+    const values = [[name, email, hash]];
+    authDbCli.query(`INSERT INTO Users(name, email, pwd) VALUES ?`, [values], (err, result) => {
       if(err){
         console.error("Error in sql Query", err);
         return reject({statusCode: StatusCodes.SERVICE_UNAVAILABLE, responseData: "Something went wrong!"});
@@ -22,20 +22,20 @@ function Signup(reqData){
       return resolve({statusCode: StatusCodes.OK, responseData: {}});
     });
   });
-}
+} 
 
 
 function Login(reqData){
   return new Promise((resolve, reject) => {
     try{
-      var {mob, password} = reqData.body;
+      var {email, password} = reqData.body;
     }catch(e){
       logger.ersror("Invalid ReqBody", e);
       return resolve({statusCode: StatusCodes.BAD_REQUEST, responseData: "Invalid Request"});
     }
 
 
-    authDbCli.query("SELECT pwd, name, email, idx from Users where mobile=?", [mob], (err, result) => {
+    authDbCli.query("SELECT pwd, name, email, idx from Users where email=?", [email], (err, result) => {
       if(err){
         console.error("Error in sql Query", err);
         return reject();
@@ -52,7 +52,6 @@ function Login(reqData){
       console.log(result);
       reqData.session.idx = result[0].idx;
       reqData.session.name = result[0].name;
-      reqData.session.mobile = mob;
       reqData.session.email = result[0].email;
       reqData.session.save();
 

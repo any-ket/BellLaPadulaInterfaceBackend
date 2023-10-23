@@ -3,7 +3,7 @@ const logger = require("logger");
 const authDbCli = mysql.createConnection({
   host: '127.0.0.1',
   user: 'root',
-  password: 'current password',
+  password: 'password',
   database: 'auth',
   multipleStatements: true
 });
