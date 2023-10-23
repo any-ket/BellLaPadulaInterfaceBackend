@@ -38,12 +38,12 @@ function CreateObject(reqData){
 			const oid = res.insertId;
 			let accessRights = [1, 2, 3];
 
-			let values = [];
+			let values = accessRights.map(right => [oid, user.idx, right]);
 
-			accessRights.forEach(right => {
-				values.push([oid, user.idx, right]);
-			}) 
-			const acmQuery = "INSERT INTO ACM(oid, uid, accessRight) VALUES ?";
+			const placeholders = values.map(() => '(?, ?, ?)').join(', ');
+
+			const acmQuery = `INSERT INTO ACM (oid, uid, accessRight) VALUES ${placeholders}`;
+
 			authDbCli.query(acmQuery, values, (err) => {
 				if(err){
 					console.error("Error in sql Query", err);
