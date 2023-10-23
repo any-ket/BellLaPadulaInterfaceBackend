@@ -44,7 +44,7 @@ function CreateObject(reqData){
 				values.push([oid, user.idx, right]);
 			}) 
 			const acmQuery = "INSERT INTO ACM(oid, uid, accessRight) VALUES ?";
-			authDbCli.query(acmQuery, (err) => {
+			authDbCli.query(acmQuery, values, (err) => {
 				if(err){
 					console.error("Error in sql Query", err);
 	        		return reject();
