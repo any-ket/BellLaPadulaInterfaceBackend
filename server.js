@@ -4,8 +4,15 @@ const logger = require("logger");
 const bodyParser = require('body-parser');
 const app = express();
 const PORT = 9099;
+const cors = require('cors');
 
 const { InitialiseSqlClients } = require("./dal/dbClient");
+
+app.use(cors({
+  origin: '*',
+  credentials: true,
+  sameSite: "none"
+}));
 app.use(bodyParser.json());
 app.use(session({
   secret: "SECRET",

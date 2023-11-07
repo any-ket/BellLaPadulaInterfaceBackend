@@ -49,8 +49,53 @@ function CreateObject(reqData){
 					console.error("Error in sql Query", err);
 	        		return reject();
 				}
-				return resolve({statusCode: StatusCodes.OK, responseData: res});
+				return resolve({statusCode: StatusCodes.OK, responseData: "Object created!"});
 			});	
+		});
+
+	});
+}
+
+function GrantObjectAccess(reqData){
+	return new Promise((resolve, reject) => { 
+		const user = reqData.user;
+
+		try{
+			var {objId, accessRights, uid} = reqData.body;
+			if(!objId || !accessRights || !accessRights.length || !uid)
+				return resolve({statusCode: StatusCodes.BAD_REQUEST, responseData: "Missing mandatory parameters!"});
+		} catch(e){
+			console.error("Error: GrantObjectAccess", e);
+			return resolve({statusCode: StatusCodes.BAD_GATEWAY, responseData: "Missing mandatory parameters!"});
+		}
+		//check if user has all these accessRights or not to ensure principle of attenuation.
+		const acmQuery = "Select count(*) from ACM where uid=? and oid=? and accessRight IN (?)";
+
+		authDbCli.query(acmQuery, [user.idx, +objId, accessRights], (err, res) => {
+			if(err){
+				console.error("Error: GrantObjectAccess", err);
+				return reject();
+			}
+
+			if(res[0]["count(*)"] != accessRights.length)
+				return resolve({statusCode: StatusCodes.UNAUTHORIZED, responseData: "You are not authorized to perform this action!"});
+
+			const insQuery = "Insert into ACM (oid, uid, accessRight) VALUES ?";
+			let values = [];
+
+			accessRights.forEach(right => {
+				values.push([objId, uid, right]);
+			});
+
+			authDbCli.query(insQuery, [values], (err, res) => {
+				if(err){
+					console.log("Error: GrantObjectAccess", err);
+					return reject();
+				}
+
+
+				return resolve({statusCode: StatusCodes.OK, responseData: "access granted successfully!"})
+			});
 		});
 
 	});
@@ -59,5 +104,6 @@ function CreateObject(reqData){
 
 module.exports = {
 	GetObject,
-	CreateObject
+	CreateObject,
+	GrantObjectAccess
 }
